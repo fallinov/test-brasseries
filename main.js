@@ -16,6 +16,15 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Couleur primary du DESIGN.md (ambre / orange-brun).
 const BREWERY_COLOR = '#B8651A';
 
+// Tous les markers vivent dans ce groupe. Le filtre add/remove des
+// markers individuels du groupe sans recreer les CircleMarker.
+const breweriesLayer = L.layerGroup().addTo(map);
+
+// Liste des brasseries en memoire pour pouvoir refiltrer a chaque frappe.
+// Chaque entree : { marker, searchableName } ou searchableName est le nom
+// pre-normalise (minuscules + sans accents) pour comparer rapidement.
+const breweries = [];
+
 // Requete Overpass : voir query-overpass.txt.
 // On veut les brasseries (craft=brewery), microbrasseries et brasseries
 // industrielles dans le pays "CH". `out center` donne lat/lon pour les
@@ -49,7 +58,6 @@ async function loadBreweries() {
 }
 
 function renderBreweries(elements) {
-  let visibleCount = 0;
   for (const element of elements) {
     // `out center` renvoie lat/lon pour les nodes, center.lat/center.lon
     // pour les ways/relations. Une brasserie sans coordonnees n'est pas
@@ -59,7 +67,7 @@ function renderBreweries(elements) {
     if (lat == null || lon == null) continue;
 
     const name = element.tags?.name ?? 'Brasserie sans nom';
-    L.circleMarker([lat, lon], {
+    const marker = L.circleMarker([lat, lon], {
       radius: 7,
       color: BREWERY_COLOR,
       fillColor: BREWERY_COLOR,
@@ -67,8 +75,30 @@ function renderBreweries(elements) {
       weight: 2,
     })
       .bindPopup(name)
-      .addTo(map);
-    visibleCount += 1;
+      .addTo(breweriesLayer);
+
+    breweries.push({ marker, searchableName: searchable(name) });
+  }
+  applyFilter('');
+}
+
+// Decompose les caracteres accentues (NFD) puis supprime les diacritiques
+// pour qu'une recherche "lorrach" matche "Lörrach". On passe en minuscules
+// pour l'insensibilite a la casse.
+function searchable(text) {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function applyFilter(query) {
+  const needle = searchable(query.trim());
+  let visibleCount = 0;
+  for (const { marker, searchableName } of breweries) {
+    if (needle === '' || searchableName.includes(needle)) {
+      breweriesLayer.addLayer(marker);
+      visibleCount += 1;
+    } else {
+      breweriesLayer.removeLayer(marker);
+    }
   }
   updateFooter(`${visibleCount} brasseries affichées`);
 }
@@ -83,5 +113,10 @@ function updateFooter(message) {
   const footer = document.querySelector('.app-footer');
   if (footer) footer.textContent = message;
 }
+
+// Filtre temps reel : "input" (pas "change") pour reagir a chaque frappe.
+document.getElementById('search').addEventListener('input', (event) => {
+  applyFilter(event.target.value);
+});
 
 loadBreweries();

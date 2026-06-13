@@ -1,0 +1,37 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  playwright:
+    name: Playwright (Chromium)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Installer les dependances npm
+        run: npm ci
+
+      - name: Installer Chromium pour Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Lancer les tests Playwright
+        run: npx playwright test
+
+      - name: Publier le rapport Playwright en cas d'echec
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
