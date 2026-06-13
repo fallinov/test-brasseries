@@ -1,0 +1,6 @@
+node_modules/
+.idea/
+.playwright-mcp/
+playwright/
+playwright-report/
+test-results/
