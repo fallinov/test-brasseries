@@ -53,6 +53,23 @@ body {
   line-height: 1.5;
 }
 
+/* ─────────────── App shell (index.html) ─────────────── */
+
+/* Squelette full-height : header et footer dimensionnés par leur contenu,
+   main prend tout l'espace restant. min-height:0 est requis pour que la
+   future carte Leaflet (qui exige une hauteur explicite) puisse remplir. */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  min-height: 0;
+  background: var(--background);
+}
+
 /* ─────────────── App layout (réutilisé par index.html) ─────────────── */
 
 .app-header {
