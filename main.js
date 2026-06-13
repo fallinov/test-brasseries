@@ -20,8 +20,10 @@ const BREWERY_COLOR = '#B8651A';
 // On veut les brasseries (craft=brewery), microbrasseries et brasseries
 // industrielles dans le pays "CH". `out center` donne lat/lon pour les
 // nodes et center.lat/center.lon pour les ways/relations.
-const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
-const OVERPASS_QUERY = `[out:json][timeout:25];
+// Miroir suisse d'Overpass — instance officielle (overpass-api.de)
+// down au moment du developpement (2026-06-14).
+const OVERPASS_URL = 'https://overpass.osm.ch/api/interpreter';
+const OVERPASS_QUERY = `[out:json][timeout:90];
 area["ISO3166-1"="CH"]->.ch;
 (
   nwr["craft"="brewery"](area.ch);
