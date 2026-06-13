@@ -1,0 +1,332 @@
+/*
+ * style.css — Brasseries de Suisse
+ * Variables CSS issues de DESIGN.md (spec Google Labs).
+ * Ce fichier est partagé entre styleguide.html (validation visuelle du DS)
+ * et l'app (index.html).
+ */
+
+:root {
+  /* Colors */
+  --background: #FAF6EE;
+  --surface: #FFFFFF;
+  --ink: #2A1F14;
+  --ink-muted: #6B5A48;
+  --primary: #B8651A;
+  --primary-strong: #8C4A12;
+  --secondary: #5C7A3D;
+  --visited: #D97A2F;
+  --warning: #C44A2C;
+  --border: #E5DCC8;
+  --border-input: #C8B89E;
+
+  /* Typography */
+  --family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --family-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --size-base: 16px;
+  --size-small: 14px;
+  --size-title: 22px;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Rounded */
+  --rounded-sm: 4px;
+  --rounded-md: 8px;
+  --rounded-lg: 12px;
+  --rounded-pill: 999px;
+}
+
+/* Reset minimal */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--family-sans);
+  font-size: var(--size-base);
+  color: var(--ink);
+  background: var(--background);
+  line-height: 1.5;
+}
+
+/* ─────────────── App layout (réutilisé par index.html) ─────────────── */
+
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.app-header__title {
+  font-size: var(--size-title);
+  font-weight: var(--weight-semibold);
+  margin: 0;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  max-width: 420px;
+  background: var(--background);
+  border: 1px solid var(--border-input);
+  border-radius: var(--rounded-md);
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: var(--size-base);
+  color: var(--ink);
+}
+
+.search-input::placeholder { color: var(--ink-muted); }
+.search-input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+.app-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: var(--space-md) var(--space-lg);
+  color: var(--ink-muted);
+  font-size: var(--size-small);
+  text-align: center;
+}
+
+/* ─────────────── Composants brasseries ─────────────── */
+
+.brewery-pin {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  position: relative;
+}
+.brewery-pin::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  background: var(--surface);
+  border-radius: 50%;
+}
+.brewery-pin--default { background: var(--primary); }
+.brewery-pin--visited { background: var(--visited); }
+
+.brewery-popup {
+  background: var(--surface);
+  border-radius: var(--rounded-md);
+  padding: var(--space-md);
+  max-width: 280px;
+  box-shadow: 0 2px 8px rgba(42, 31, 20, 0.12);
+}
+.brewery-popup__name {
+  font-weight: var(--weight-semibold);
+  color: var(--ink);
+  margin: 0 0 var(--space-xs) 0;
+}
+.brewery-popup__meta {
+  color: var(--ink-muted);
+  font-size: var(--size-small);
+  margin: 0 0 var(--space-sm) 0;
+}
+.brewery-popup__link {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: var(--size-small);
+}
+.brewery-popup__link:hover { text-decoration: underline; }
+
+.visited-button {
+  background: var(--secondary);
+  color: var(--surface);
+  border: none;
+  border-radius: var(--rounded-pill);
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  margin-top: var(--space-sm);
+}
+.visited-button:hover { filter: brightness(1.05); }
+
+/* ─────────────── Styleguide (cette page uniquement) ─────────────── */
+
+.styleguide {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.styleguide__hero {
+  margin-bottom: var(--space-xl);
+}
+.styleguide__eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  font-weight: var(--weight-semibold);
+}
+.styleguide__title {
+  font-size: 40px;
+  font-weight: var(--weight-semibold);
+  margin: var(--space-sm) 0 var(--space-xs) 0;
+  letter-spacing: -0.02em;
+}
+.styleguide__lead {
+  color: var(--ink-muted);
+  font-size: 18px;
+  margin: 0;
+  max-width: 620px;
+}
+
+.section {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--border);
+}
+.section__title {
+  font-size: 24px;
+  font-weight: var(--weight-semibold);
+  margin: 0 0 var(--space-md) 0;
+  letter-spacing: -0.01em;
+}
+.section__lead {
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-lg) 0;
+  max-width: 620px;
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-md);
+}
+.swatch {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded-md);
+  overflow: hidden;
+}
+.swatch__fill {
+  height: 80px;
+  border-bottom: 1px solid var(--border);
+}
+.swatch__meta { padding: var(--space-sm) var(--space-md); }
+.swatch__name {
+  display: block;
+  font-weight: var(--weight-semibold);
+  font-size: var(--size-small);
+}
+.swatch__hex {
+  display: block;
+  font-family: var(--family-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+.swatch__role {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 4px;
+}
+
+.typo-sample { padding: var(--space-md) 0; border-top: 1px dashed var(--border); }
+.typo-sample:first-child { border-top: none; }
+.typo-sample__label {
+  display: block;
+  font-family: var(--family-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-xs);
+}
+.typo-sample--title { font-size: var(--size-title); font-weight: var(--weight-semibold); }
+.typo-sample--base { font-size: var(--size-base); }
+.typo-sample--small { font-size: var(--size-small); }
+.typo-sample--mono { font-family: var(--family-mono); font-size: var(--size-small); }
+
+.spacing-rail {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-md);
+}
+.spacing-block {
+  background: var(--primary);
+  border-radius: var(--rounded-sm);
+}
+.spacing-block__label {
+  display: block;
+  font-family: var(--family-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: var(--space-xs);
+  text-align: center;
+}
+
+.rounded-demo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-md);
+}
+.rounded-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: var(--space-lg);
+  text-align: center;
+}
+.rounded-card__label {
+  display: block;
+  font-family: var(--family-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.component-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded-md);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+.component-card__label {
+  display: block;
+  font-family: var(--family-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-md);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pin-row { display: flex; gap: var(--space-lg); align-items: flex-end; }
+.pin-row__item { display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); }
+.pin-row__caption {
+  font-family: var(--family-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.map-mock {
+  background: linear-gradient(135deg, #DCE8DA, #E8E4D2);
+  height: 280px;
+  border-radius: var(--rounded-md);
+  position: relative;
+  overflow: hidden;
+}
+.map-mock__pin {
+  position: absolute;
+}
+
+/* ─────────────── Responsive ─────────────── */
+@media (max-width: 600px) {
+  .app-header { flex-direction: column; align-items: stretch; gap: var(--space-sm); }
+  .search-input { max-width: 100%; }
+  .styleguide { padding: var(--space-lg) var(--space-md); }
+  .styleguide__title { font-size: 28px; }
+}

@@ -1,0 +1,8 @@
+[out:json][timeout:25];
+area["ISO3166-1"="CH"]->.ch;
+(
+  nwr["craft"="brewery"](area.ch);
+  nwr["microbrewery"="yes"](area.ch);
+  nwr["industrial"="brewery"](area.ch);
+);
+out center;

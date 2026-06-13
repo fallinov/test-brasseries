@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styleguide — Brasseries de Suisse</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="styleguide">
+
+  <!-- HERO -->
+  <header class="styleguide__hero">
+    <span class="styleguide__eyebrow">Design system · preview</span>
+    <h1 class="styleguide__title">Brasseries de Suisse</h1>
+    <p class="styleguide__lead">
+      Rendu visuel du design system défini dans <code>DESIGN.md</code>.
+      Cette page est la <strong>preuve visuelle</strong> que la palette, la typo
+      et les composants sont cohérents avant qu'on attaque le code de l'app.
+    </p>
+  </header>
+
+  <!-- PALETTE -->
+  <section class="section" aria-labelledby="sec-palette">
+    <h2 id="sec-palette" class="section__title">Palette</h2>
+    <p class="section__lead">Terre + bière. 7 couleurs, chacune avec un rôle précis.</p>
+    <div class="swatches">
+
+      <div class="swatch">
+        <div class="swatch__fill" style="background: var(--background);"></div>
+        <div class="swatch__meta">
+          <span class="swatch__name">background</span>
+          <span class="swatch__hex">#FAF6EE</span>
+          <span class="swatch__role">fond de page (ivoire chaud)</span>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch__fill" style="background: var(--surface); border-bottom: 1px solid var(--border);"></div>
+        <div class="swatch__meta">
+          <span class="swatch__name">surface</span>
+          <span class="swatch__hex">#FFFFFF</span>
+          <span class="swatch__role">cartes, popup, header, footer</span>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch__fill" style="background: var(--ink);"></div>
+        <div class="swatch__meta">
+          <span class="swatch__name">ink</span>
+          <span class="swatch__hex">#2A1F14</span>
+          <span class="swatch__role">texte principal</span>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch__fill" style="background: var(--ink-muted);"></div>
+        <div class="swatch__meta">
+          <span class="swatch__name">ink-muted</span>
+          <span class="swatch__hex">#6B5A48</span>
+          <span class="swatch__role">texte secondaire, placeholders</span>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch__fill" style="background: var(--primary);"></div>
+        <div class="swatch__meta">
+          <span class="swatch__name">primary</span>
+          <span class="swatch__hex">#B8651A</span>
+          <span class="swatch__role">accent principal, pins par défaut</span>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch__fill" style="background: var(--secondary);"></div>
+        <div class="swatch__meta">
+          <span class="swatch__name">secondary</span>
+          <span class="swatch__hex">#5C7A3D</span>
+          <span class="swatch__role">bouton « visitée », vert mousse</span>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch__fill" style="background: var(--visited);"></div>
+        <div class="swatch__meta">
+          <span class="swatch__name">visited</span>
+          <span class="swatch__hex">#D97A2F</span>
+          <span class="swatch__role">pins des brasseries visitées</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHIE -->
+  <section class="section" aria-labelledby="sec-typo">
+    <h2 id="sec-typo" class="section__title">Typographie</h2>
+    <p class="section__lead">Polices système. Simples et lisibles, aucune dépendance externe.</p>
+
+    <div class="typo-sample typo-sample--title">
+      <span class="typo-sample__label">size-title · 22px · semibold</span>
+      Brasseries de Suisse
+    </div>
+    <div class="typo-sample typo-sample--base">
+      <span class="typo-sample__label">size-base · 16px · regular</span>
+      271 brasseries répertoriées sur la carte interactive. Recherche insensible à la casse et aux accents.
+    </div>
+    <div class="typo-sample typo-sample--small">
+      <span class="typo-sample__label">size-small · 14px · regular</span>
+      Pied de page · compteur · texte secondaire dans les popups.
+    </div>
+    <div class="typo-sample typo-sample--mono">
+      <span class="typo-sample__label">family-mono · 14px</span>
+      ui-monospace, 'SF Mono', Menlo, monospace
+    </div>
+  </section>
+
+  <!-- SPACING -->
+  <section class="section" aria-labelledby="sec-spacing">
+    <h2 id="sec-spacing" class="section__title">Spacing</h2>
+    <p class="section__lead">Échelle 4/8/16/24/32 px. À utiliser uniquement via les variables CSS.</p>
+
+    <div class="spacing-rail">
+      <div>
+        <div class="spacing-block" style="width: 4px; height: 4px;"></div>
+        <span class="spacing-block__label">xs · 4</span>
+      </div>
+      <div>
+        <div class="spacing-block" style="width: 8px; height: 8px;"></div>
+        <span class="spacing-block__label">sm · 8</span>
+      </div>
+      <div>
+        <div class="spacing-block" style="width: 16px; height: 16px;"></div>
+        <span class="spacing-block__label">md · 16</span>
+      </div>
+      <div>
+        <div class="spacing-block" style="width: 24px; height: 24px;"></div>
+        <span class="spacing-block__label">lg · 24</span>
+      </div>
+      <div>
+        <div class="spacing-block" style="width: 32px; height: 32px;"></div>
+        <span class="spacing-block__label">xl · 32</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROUNDED -->
+  <section class="section" aria-labelledby="sec-rounded">
+    <h2 id="sec-rounded" class="section__title">Rounded</h2>
+    <p class="section__lead">4 valeurs. Les coins arrondis donnent l'ambiance chaleureuse.</p>
+
+    <div class="rounded-demo">
+      <div class="rounded-card" style="border-radius: var(--rounded-sm);">
+        <span class="rounded-card__label">sm · 4px</span>
+      </div>
+      <div class="rounded-card" style="border-radius: var(--rounded-md);">
+        <span class="rounded-card__label">md · 8px</span>
+      </div>
+      <div class="rounded-card" style="border-radius: var(--rounded-lg);">
+        <span class="rounded-card__label">lg · 12px</span>
+      </div>
+      <div class="rounded-card" style="border-radius: var(--rounded-pill);">
+        <span class="rounded-card__label">pill · 999px</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPOSANTS -->
+  <section class="section" aria-labelledby="sec-components">
+    <h2 id="sec-components" class="section__title">Composants</h2>
+    <p class="section__lead">Chaque composant rendu dans son vrai code HTML — réutilisable tel quel dans <code>index.html</code>.</p>
+
+    <!-- Header complet -->
+    <div class="component-card">
+      <span class="component-card__label">app-header (titre + recherche)</span>
+      <div class="app-header">
+        <h1 class="app-header__title">Brasseries de Suisse</h1>
+        <input type="search" class="search-input" placeholder="Rechercher une brasserie..." aria-label="Rechercher">
+      </div>
+    </div>
+
+    <!-- Pins -->
+    <div class="component-card">
+      <span class="component-card__label">brewery-pin (par défaut + visitée)</span>
+      <div class="pin-row">
+        <div class="pin-row__item">
+          <span class="brewery-pin brewery-pin--default" aria-hidden="true"></span>
+          <span class="pin-row__caption">.brewery-pin--default</span>
+        </div>
+        <div class="pin-row__item">
+          <span class="brewery-pin brewery-pin--visited" aria-hidden="true"></span>
+          <span class="pin-row__caption">.brewery-pin--visited</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="component-card">
+      <span class="component-card__label">brewery-popup (au clic sur une pin)</span>
+      <div class="brewery-popup">
+        <h3 class="brewery-popup__name">Brasserie de la Lorraine</h3>
+        <p class="brewery-popup__meta">Bern</p>
+        <a class="brewery-popup__link" href="#">Visiter le site web →</a>
+        <br>
+        <button type="button" class="visited-button">Marquer comme visitée</button>
+      </div>
+    </div>
+
+    <!-- Bouton visité (2 états) -->
+    <div class="component-card">
+      <span class="component-card__label">visited-button (2 états)</span>
+      <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+        <button type="button" class="visited-button">Marquer comme visitée</button>
+        <button type="button" class="visited-button">Marquer comme non visitée</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="component-card">
+      <span class="component-card__label">app-footer (compteur)</span>
+      <footer class="app-footer">271 brasseries affichées</footer>
+    </div>
+
+    <!-- Carte mockup (rendu d'ensemble) -->
+    <div class="component-card">
+      <span class="component-card__label">map-mock (illustration carte + pins)</span>
+      <div class="map-mock" role="img" aria-label="Aperçu de la carte avec pins">
+        <span class="brewery-pin brewery-pin--default map-mock__pin" style="top: 30%; left: 25%;"></span>
+        <span class="brewery-pin brewery-pin--default map-mock__pin" style="top: 50%; left: 55%;"></span>
+        <span class="brewery-pin brewery-pin--visited map-mock__pin" style="top: 40%; left: 75%;"></span>
+        <span class="brewery-pin brewery-pin--default map-mock__pin" style="top: 65%; left: 35%;"></span>
+        <span class="brewery-pin brewery-pin--visited map-mock__pin" style="top: 60%; left: 80%;"></span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER STYLEGUIDE -->
+  <footer class="section" style="text-align: center; color: var(--ink-muted); font-size: var(--size-small);">
+    <p>Généré à partir de <code>DESIGN.md</code>. Réutilise <code>style.css</code> à la racine.
+    Pour mettre à jour : modifier <code>DESIGN.md</code>, demander à Claude Code de propager dans <code>style.css</code>.</p>
+  </footer>
+
+</main>
+
+</body>
+</html>
