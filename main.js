@@ -13,17 +13,39 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
-// Couleur primary du DESIGN.md (ambre / orange-brun).
+// Couleur primary du DESIGN.md (ambre / orange-brun) pour les brasseries
+// non visitees, secondary (vert mousse) pour les visitees.
 const BREWERY_COLOR = '#B8651A';
+const VISITED_COLOR = '#5C7A3D';
 
 // Tous les markers vivent dans ce groupe. Le filtre add/remove des
 // markers individuels du groupe sans recreer les CircleMarker.
 const breweriesLayer = L.layerGroup().addTo(map);
 
-// Liste des brasseries en memoire pour pouvoir refiltrer a chaque frappe.
-// Chaque entree : { marker, searchableName } ou searchableName est le nom
-// pre-normalise (minuscules + sans accents) pour comparer rapidement.
+// Liste des brasseries en memoire. Chaque entree :
+//   { id, name, marker, searchableName }
+// id : identifiant OSM (string) — sert de cle dans localStorage.
+// searchableName : nom pre-normalise (minuscules + sans accents).
 const breweries = [];
+
+// Persistence de l'etat "visitee" : un Set d'IDs OSM serialise en tableau
+// dans localStorage sous la cle "visited_breweries".
+const VISITED_STORAGE_KEY = 'visited_breweries';
+const visitedIds = loadVisitedIds();
+
+function loadVisitedIds() {
+  try {
+    const raw = localStorage.getItem(VISITED_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(parsed) ? parsed : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveVisitedIds() {
+  localStorage.setItem(VISITED_STORAGE_KEY, JSON.stringify([...visitedIds]));
+}
 
 // Requete Overpass : voir query-overpass.txt.
 // On veut les brasseries (craft=brewery), microbrasseries et brasseries
@@ -66,20 +88,65 @@ function renderBreweries(elements) {
     const lon = element.lon ?? element.center?.lon;
     if (lat == null || lon == null) continue;
 
+    const id = String(element.id);
     const name = element.tags?.name ?? 'Brasserie sans nom';
+    const color = visitedIds.has(id) ? VISITED_COLOR : BREWERY_COLOR;
+
     const marker = L.circleMarker([lat, lon], {
       radius: 7,
-      color: BREWERY_COLOR,
-      fillColor: BREWERY_COLOR,
+      color,
+      fillColor: color,
       fillOpacity: 0.85,
       weight: 2,
-    })
-      .bindPopup(name)
-      .addTo(breweriesLayer);
+    }).addTo(breweriesLayer);
 
-    breweries.push({ marker, searchableName: searchable(name) });
+    const brewery = { id, name, marker, searchableName: searchable(name) };
+    // Fonction (pas string) : Leaflet la rappelle a chaque ouverture du
+    // popup, donc le label du bouton reflete toujours l'etat courant.
+    marker.bindPopup(() => createPopupContent(brewery));
+    breweries.push(brewery);
   }
   applyFilter('');
+}
+
+function createPopupContent(brewery) {
+  const visited = visitedIds.has(brewery.id);
+
+  const container = document.createElement('div');
+  container.className = 'brewery-popup';
+
+  const title = document.createElement('p');
+  title.className = 'brewery-popup__name';
+  title.textContent = brewery.name;
+  container.appendChild(title);
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'visited-button';
+  button.textContent = visited
+    ? 'Marquer comme non visitée'
+    : 'Marquer comme visitée';
+  button.addEventListener('click', () => toggleVisited(brewery));
+  container.appendChild(button);
+
+  return container;
+}
+
+function toggleVisited(brewery) {
+  const willBeVisited = !visitedIds.has(brewery.id);
+  if (willBeVisited) {
+    visitedIds.add(brewery.id);
+  } else {
+    visitedIds.delete(brewery.id);
+  }
+  saveVisitedIds();
+
+  const color = willBeVisited ? VISITED_COLOR : BREWERY_COLOR;
+  brewery.marker.setStyle({ color, fillColor: color });
+
+  // Met a jour le contenu du popup affiche (regenere le bouton avec le bon
+  // label "Marquer comme non visitee" / "Marquer comme visitee").
+  brewery.marker.setPopupContent(createPopupContent(brewery));
 }
 
 // Decompose les caracteres accentues (NFD) puis supprime les diacritiques

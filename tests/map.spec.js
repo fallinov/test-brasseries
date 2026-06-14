@@ -16,7 +16,8 @@ const OVERPASS_FIXTURE = {
   ],
 };
 
-test('au chargement, des pins sont rendues sur la carte', async ({ page }) => {
+// Helper : installe le mock Overpass sur toutes les requetes de la page.
+async function mockOverpass(page) {
   await page.route('**/overpass.osm.ch/api/interpreter', (route) =>
     route.fulfill({
       status: 200,
@@ -24,7 +25,10 @@ test('au chargement, des pins sont rendues sur la carte', async ({ page }) => {
       body: JSON.stringify(OVERPASS_FIXTURE),
     })
   );
+}
 
+test('au chargement, des pins sont rendues sur la carte', async ({ page }) => {
+  await mockOverpass(page);
   await page.goto('/');
 
   // Au moins une pin (les CircleMarker de Leaflet sont des <path> SVG
@@ -37,4 +41,20 @@ test('au chargement, des pins sont rendues sur la carte', async ({ page }) => {
 
   // Et le compteur du footer suit.
   await expect(page.locator('.app-footer')).toHaveText('2 brasseries affichées');
+});
+
+test('au clic sur "Marquer comme visitee", la pin change de couleur', async ({ page }) => {
+  await mockOverpass(page);
+  await page.goto('/');
+
+  // Etat initial : la pin est ambre (#B8651A = primary).
+  const firstPin = page.locator('.leaflet-overlay-pane path').first();
+  await expect(firstPin).toHaveAttribute('fill', '#B8651A');
+
+  // Ouvre le popup et clique sur le bouton.
+  await firstPin.click();
+  await page.getByRole('button', { name: 'Marquer comme visitée' }).click();
+
+  // La pin est maintenant verte (#5C7A3D = secondary, vert mousse).
+  await expect(firstPin).toHaveAttribute('fill', '#5C7A3D');
 });
