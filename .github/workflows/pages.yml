@@ -1,0 +1,62 @@
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Une seule execution en cours a la fois — sans annuler celle en route
+# (recommandation officielle pour ne pas couper un deploiement actif).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Construire l'artefact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Le site est statique : on prepare _site/ en excluant tout ce
+      # qui n'a rien a faire en prod (outillage, docs, tests).
+      - name: Preparer le dossier _site
+        run: |
+          mkdir -p _site
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.gitignore' \
+            --exclude='node_modules' \
+            --exclude='tests' \
+            --exclude='playwright' \
+            --exclude='playwright.config.js' \
+            --exclude='package.json' \
+            --exclude='package-lock.json' \
+            --exclude='CLAUDE.md' \
+            --exclude='DESIGN.md' \
+            --exclude='SPEC.md' \
+            --exclude='_site' \
+            ./ _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deployer sur GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
