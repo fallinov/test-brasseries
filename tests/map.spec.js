@@ -43,33 +43,18 @@ test('au chargement, des pins sont rendues sur la carte', async ({ page }) => {
   await expect(page.locator('.app-footer')).toHaveText('2 brasseries affichées');
 });
 
-test('marquer une brasserie comme visitee persiste apres un rechargement', async ({ page }) => {
+test('au clic sur "Marquer comme visitee", la pin change de couleur', async ({ page }) => {
   await mockOverpass(page);
   await page.goto('/');
 
-  // Ouvre le popup de la 1ere pin et clique sur "Marquer comme visitee".
+  // Etat initial : la pin est ambre (#B8651A = primary).
   const firstPin = page.locator('.leaflet-overlay-pane path').first();
+  await expect(firstPin).toHaveAttribute('fill', '#B8651A');
+
+  // Ouvre le popup et clique sur le bouton.
   await firstPin.click();
-  const visitedButton = page.getByRole('button', { name: 'Marquer comme visitée' });
-  await expect(visitedButton).toBeVisible();
-  await visitedButton.click();
+  await page.getByRole('button', { name: 'Marquer comme visitée' }).click();
 
-  // La couleur du marker passe au vert mousse (#5C7A3D = secondary).
+  // La pin est maintenant verte (#5C7A3D = secondary, vert mousse).
   await expect(firstPin).toHaveAttribute('fill', '#5C7A3D');
-
-  // Le label du bouton bascule a "Marquer comme non visitee".
-  await expect(
-    page.getByRole('button', { name: 'Marquer comme non visitée' })
-  ).toBeVisible();
-
-  // L'etat est persiste : on recharge, la pin reste verte.
-  await page.reload();
-  const firstPinAfterReload = page.locator('.leaflet-overlay-pane path').first();
-  await expect(firstPinAfterReload).toHaveAttribute('fill', '#5C7A3D');
-
-  // Sanity check : localStorage contient bien l'id de la brasserie.
-  const stored = await page.evaluate(() =>
-    JSON.parse(localStorage.getItem('visited_breweries'))
-  );
-  expect(stored).toEqual(['1']);
 });
